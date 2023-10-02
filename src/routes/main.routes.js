@@ -1,11 +1,11 @@
-import express from "express";
-import { StatusCodes } from "http-status-codes";
+import express from 'express'
+import { StatusCodes } from 'http-status-codes'
 
-const router = express.Router();
+const router = express.Router()
 
 router.get('/ping', (req, res) => {
-    res.status(StatusCodes.OK)
-    res.send('Okay');
+  res.status(StatusCodes.OK)
+  res.send('Okay')
 })
 
-export default router;
+export default router

@@ -1,49 +1,48 @@
-import users from "../data/users.data";
+import users from '../data/users.data'
 
 const get = (userId) => users.find((user) => user.id === userId)
 
-const getAll = () => users;
+const getAll = () => users
 
 const insert = (details) => {
-    const newUser = {id: users.length + 1 , ...details,};
-    users.push(newUser);
-    return newUser;
+  const newUser = { id: users.length + 1, ...details }
+  users.push(newUser)
+  return newUser
 }
 
 const update = (userId, newDetails) => {
-    let existingUser = false;
-    let userIndex;
-    users.map((user, index) => {
-        if(user.id === userId) {
-            existingUser =  user;
-            userIndex = index;
-        }
-    }) 
-
-    if(!existingUser) {
-        return false
+  let existingUser = false
+  let userIndex
+  users.map((user, index) => {
+    if (user.id === userId) {
+      existingUser = user
+      userIndex = index
     }
+  })
 
-    const updatedUser = {
-        ...existingUser,
-        ...newDetails
-    }
+  if (!existingUser) {
+    return false
+  }
 
-    users.splice(userIndex, 1, updatedUser);
+  const updatedUser = {
+    ...existingUser,
+    ...newDetails
+  }
 
-    return updatedUser;
+  users.splice(userIndex, 1, updatedUser)
+
+  return updatedUser
 }
 
 const remove = (userId) => {
-    const deleteUser = (user, index) => {
-        if(user?.id === userId) {
-            users.splice(index, 1);
-            return true;
-        }
-        return false;
+  const deleteUser = (user, index) => {
+    if (user?.id === userId) {
+      users.splice(index, 1)
+      return true
     }
-    return users.find(deleteUser);
+    return false
+  }
+  return users.find(deleteUser)
 }
 
-export default {getAll, get, insert, update, remove};
-
+export default { getAll, get, insert, update, remove }
