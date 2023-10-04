@@ -2,9 +2,11 @@
 
 ## Installation
 
-Use the package manager [express](https://www.npmjs.com/) to install express.
+Use the package manager [npm](https://www.npmjs.com/) to install packages.
+OR
+Use the package manager [yarn](https://classic.yarnpkg.com/lang/en/docs/install/) to install packages.
 
-Need to package install
+<!-- Need to package install
 
 ```bash
 yarn add express
@@ -12,7 +14,7 @@ yarn add helmet
 yarn add yup
 yarn add http-status-codes
 yarn add express-yup-middleware
-```
+``` -->
 
 ## Usage
 
