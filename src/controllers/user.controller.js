@@ -1,5 +1,8 @@
 import { StatusCodes } from 'http-status-codes'
 import userServices from '../services/user.service'
+import pino from 'pino'
+
+const logger = pino()
 
 const STATUS = {
   success: 'OK',
@@ -10,6 +13,7 @@ const getAllUsersController = (req, res) => {
   const users = userServices.getAllUsers()
 
   if (users?.length) {
+    logger.info(`get All  User ${JSON.stringify(users)}`)
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
       data: users
@@ -27,6 +31,7 @@ const getUserController = (req, res) => {
   const user = userServices.getUser(id)
 
   if (user) {
+    logger.info(`get User ${JSON.stringify(user)}`)
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
       data: user
@@ -43,7 +48,7 @@ const addUserController = (req, res) => {
   const { body: user } = req
 
   const addedUSer = userServices.addUser(user)
-
+  logger.info(`Create  User : ${JSON.stringify(user)}`)
   return res.status(StatusCodes.CREATED).send({
     status: STATUS.success,
     data: addedUSer
@@ -58,6 +63,7 @@ const updateUserController = (req, res) => {
   const updatedUser = userServices.updateUser(id, user)
 
   if (updatedUser) {
+    logger.info(`update User : ${id} updated ${JSON.stringify(user)}`)
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
       data: updatedUser
@@ -75,6 +81,7 @@ const deleteUserController = (req, res) => {
   const user = userServices.getUser(id)
 
   if (user) {
+    logger.info(`delete User : ${id}`)
     userServices.removeUser(id)
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,

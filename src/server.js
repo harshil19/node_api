@@ -2,6 +2,7 @@ import compression from 'compression'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
+import cors from 'cors'
 import mainRoutes from './routes/main.routes'
 import userRoutes from './routes/user.routes'
 
@@ -19,6 +20,7 @@ app.use(limiter)
 app.use(compression())
 app.use(express.json())
 app.use(helmet())
+app.use(cors())
 
 app.use('/v1', mainRoutes)
 app.use('/v1/user', userRoutes)
