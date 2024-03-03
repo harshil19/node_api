@@ -21,6 +21,8 @@ yarn add express-yup-middleware
 ```node
 yarn install
 
+yarn start 
+
 # returns 'add user'
 localhost:3000/v1/user/add-user
 
