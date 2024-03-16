@@ -18,6 +18,7 @@ const update = (userId, newDetails) => {
       existingUser = user
       userIndex = index
     }
+    return true
   })
 
   if (!existingUser) {

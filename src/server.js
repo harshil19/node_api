@@ -1,8 +1,8 @@
 import compression from 'compression'
+import cors from 'cors'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
-import cors from 'cors'
 import mainRoutes from './routes/main.routes'
 import userRoutes from './routes/user.routes'
 
