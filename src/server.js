@@ -7,7 +7,7 @@ import mainRoutes from './routes/main.routes'
 import userRoutes from './routes/user.routes'
 
 const app = express()
-const port = 3000
+const port = 4000
 
 const limiter = rateLimit({
   windowMs: 2 * 60 * 1000, // 2 minutes
