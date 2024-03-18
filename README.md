@@ -24,19 +24,19 @@ yarn install
 yarn start 
 
 # returns 'add user'
-localhost:3000/v1/user/add-user
+localhost:4000/v1/user/add-user
 
 # returns 'update user'
-localhost:3000/v1/user/update-user/id
+localhost:4000/v1/user/update-user/id
 
 # returns 'delete user'
-localhost:3000/v1/user/delete-user/id
+localhost:4000/v1/user/delete-user/id
 
 # returns 'get user'
-localhost:3000/v1/user/get-user/id
+localhost:4000/v1/user/get-user/id
 
 # returns 'get all users'
-localhost:3000/v1/user/get-all-users
+localhost:4000/v1/user/get-all-users
 ```
 
 ## Contributing
