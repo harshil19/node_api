@@ -12,6 +12,11 @@
         "lint:check": "eslint .",
         "lint:fix": "eslint --fix ."
     },
+    "ava": {
+        "require": [
+            "@babel/register"
+        ]
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/harshil19/node_crud_api.git"
@@ -31,6 +36,7 @@
         "@babel/core": "^7.24.0",
         "@babel/node": "^7.23.9",
         "@babel/preset-env": "^7.24.0",
+        "@babel/register": "^7.23.7",
         "ava": "^6.1.2",
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
