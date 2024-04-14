@@ -16,7 +16,8 @@ const getAllUsersController = (req, res) => {
     logger.info(`get All  User ${JSON.stringify(users)}`)
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
-      data: users
+      data: users,
+      message: 'All Users Found Successfully'
     })
   }
 
@@ -51,7 +52,8 @@ const addUserController = (req, res) => {
   logger.info(`Create  User : ${JSON.stringify(user)}`)
   return res.status(StatusCodes.CREATED).send({
     status: STATUS.success,
-    data: addedUSer
+    data: addedUSer,
+    message: 'Data added Successfully'
   })
 }
 
@@ -66,7 +68,8 @@ const updateUserController = (req, res) => {
     logger.info(`update User : ${id} updated ${JSON.stringify(user)}`)
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
-      data: updatedUser
+      data: updatedUser,
+      message: 'Updated Successfully'
     })
   } else {
     return res.status(StatusCodes.NOT_FOUND).send({
@@ -85,7 +88,7 @@ const deleteUserController = (req, res) => {
     userServices.removeUser(id)
     return res.status(StatusCodes.OK).send({
       status: STATUS.success,
-      message: `User ${id} Delete SuccessFully`
+      message: 'User Delete SuccessFully'
     })
   } else {
     return res.status(StatusCodes.NOT_FOUND).send({
@@ -95,4 +98,10 @@ const deleteUserController = (req, res) => {
   }
 }
 
-export default { addUserController, deleteUserController, getAllUsersController, getUserController, updateUserController }
+export default {
+  addUserController,
+  deleteUserController,
+  getAllUsersController,
+  getUserController,
+  updateUserController
+}
