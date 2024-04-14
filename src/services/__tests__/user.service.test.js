@@ -14,6 +14,13 @@ test.beforeEach((t) => {
   }
 })
 
+test.after(() => {
+  if (userService.getUser(2)) {
+    console.log('Cleanup: User 2 is being removed.')
+    userService.removeUser(2)
+  }
+})
+
 test('must add user', (t) => {
   const userId = 1
   const user = userService.addUser(sampleUser)
