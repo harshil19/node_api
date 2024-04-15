@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
 import userServices from '../services/user.service'
 import pino from 'pino'
+import { pool } from '../pool'
 
 const logger = pino()
 
@@ -9,91 +10,153 @@ const STATUS = {
   failure: 'ERROR'
 }
 
-const getAllUsersController = (req, res) => {
-  const users = userServices.getAllUsers()
+const getAllUsersController = async (req, res) => {
+  try {
+    // Execute a SELECT query to fetch all users
+    const users = await pool.query('SELECT * FROM users')
 
-  if (users?.length) {
-    logger.info(`get All  User ${JSON.stringify(users)}`)
-    return res.status(StatusCodes.OK).send({
-      status: STATUS.success,
-      data: users,
-      message: 'All Users Found Successfully'
+    if (users?.length) {
+      logger.info(`Get All Users: ${JSON.stringify(users)}`)
+      res.status(StatusCodes.OK).send({
+        status: STATUS.success,
+        data: users,
+        message: 'All Users Found Successfully'
+      })
+    } else {
+      res.status(StatusCodes.NOT_FOUND).send({
+        status: STATUS.failure,
+        message: 'No Users Found'
+      })
+    }
+  } catch (error) {
+    console.error('Error fetching users:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      status: STATUS.error,
+      message: 'An error occurred while fetching users'
     })
   }
-
-  return res.status(StatusCodes.NOT_FOUND).send({
-    status: STATUS.failure,
-    message: 'No User Found'
-  })
 }
 
-const getUserController = (req, res) => {
-  const id = parseInt(req.params.id, 10)
-  const user = userServices.getUser(id)
+const getUserController = async (req, res) => {
+  const userId = parseInt(req.params.id, 10)
 
-  if (user) {
-    logger.info(`get User ${JSON.stringify(user)}`)
-    return res.status(StatusCodes.OK).send({
-      status: STATUS.success,
-      data: user
+  try {
+    // Execute a SELECT query to fetch the user with the specified ID
+    const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [userId])
+
+    if (rows.length) {
+      const user = rows[0] // Assuming the query returns only one user
+      logger.info(`Get User: ${JSON.stringify(user)}`)
+      res.status(StatusCodes.OK).send({
+        status: STATUS.success,
+        data: user
+      })
+    } else {
+      res.status(StatusCodes.NOT_FOUND).send({
+        status: STATUS.failure,
+        message: `User ${userId} Not Found`
+      })
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      status: STATUS.error,
+      message: 'An error occurred while fetching user'
     })
   }
-
-  return res.status(StatusCodes.NOT_FOUND).send({
-    status: STATUS.failure,
-    message: `User ${id} Not Found`
-  })
 }
 
-const addUserController = (req, res) => {
+const addUserController = async (req, res) => {
   const { body: user } = req
 
-  const addedUSer = userServices.addUser(user)
-  logger.info(`Create  User : ${JSON.stringify(user)}`)
-  return res.status(StatusCodes.CREATED).send({
-    status: STATUS.success,
-    data: addedUSer,
-    message: 'Data added Successfully'
-  })
-}
+  try {
+    // Format the values for the 'topics' and 'levels' columns
+    const formattedUser = {
+      ...user,
+      types: user.types.join(', '),
+      topics: user.topics.join(', '), // Join array elements into a comma-separated string
+      levels: user.levels.join(', ') // Join array elements into a comma-separated string
+    }
 
-const updateUserController = (req, res) => {
-  const { body: user } = req
+    // Insert data into the 'users' table
+    const result = await pool.query(
+      'INSERT INTO users SET ?',
+      formattedUser
+    )
 
-  const id = parseInt(req.params.id, 10)
-
-  const updatedUser = userServices.updateUser(id, user)
-
-  if (updatedUser) {
-    logger.info(`update User : ${id} updated ${JSON.stringify(user)}`)
-    return res.status(StatusCodes.OK).send({
+    logger.info(`Create  User : ${JSON.stringify(user)}`)
+    res.status(StatusCodes.CREATED).send({
       status: STATUS.success,
-      data: updatedUser,
-      message: 'Updated Successfully'
+      data: result.insertId,
+      message: 'Data added Successfully'
     })
-  } else {
-    return res.status(StatusCodes.NOT_FOUND).send({
-      status: STATUS.failure,
-      message: `User ${id} Not Found`
+  } catch (error) {
+    console.error('Error inserting data:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      status: STATUS.error,
+      message: 'An error occurred while inserting data'
     })
   }
 }
 
-const deleteUserController = (req, res) => {
+const updateUserController = async (req, res) => {
+  const { body: user } = req
+
+  const id = parseInt(req.params.id, 10)
+
+  try {
+    const updatedUser = userServices.updateUser(id, user) // Assuming updateUser returns the updated user
+    await pool.query(
+      'UPDATE users SET description = ?, url = ?, types = ?, topics = ?, levels = ? WHERE id = ?',
+      [user?.description, user?.url, user?.types.join(', '), user?.topics.join(', '), user?.levels.join(', '), id]
+    )
+
+    if (updatedUser) {
+      logger.info(`update User : ${id} updated ${JSON.stringify(user)}`)
+      res.status(StatusCodes.OK).send({
+        status: STATUS.success,
+        data: updatedUser,
+        message: 'User updated successfully'
+      })
+    } else {
+      res.status(StatusCodes.NOT_FOUND).send({
+        status: STATUS.failure,
+        message: `User ${id} not found`
+      })
+    }
+  } catch (error) {
+    console.error('Error updating user:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      status: STATUS.error,
+      message: 'An error occurred while updating user'
+    })
+  }
+}
+
+const deleteUserController = async (req, res) => {
   const id = parseInt(req.params.id)
   const user = userServices.getUser(id)
+  try {
+    await pool.query('DELETE FROM users WHERE id = ?', id)
 
-  if (user) {
-    logger.info(`delete User : ${id}`)
-    userServices.removeUser(id)
-    return res.status(StatusCodes.OK).send({
-      status: STATUS.success,
-      message: 'User Delete SuccessFully'
-    })
-  } else {
-    return res.status(StatusCodes.NOT_FOUND).send({
-      status: STATUS.failure,
-      message: `User ${id} not found `
+    if (user) {
+      logger.info(`User deleted successfully with ID: ${id}`)
+      userServices.removeUser(id)
+      res.status(StatusCodes.OK).send({
+        status: STATUS.success,
+        message: 'User deleted successfully'
+      })
+    } else {
+      res.status(StatusCodes.NOT_FOUND).send({
+        status: STATUS.failure,
+        message: `User ${id} not found`
+      })
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      status: STATUS.error,
+      message: 'An error occurred while deleting user'
     })
   }
 }
