@@ -22,7 +22,10 @@ yarn add express-yup-middleware
 yarn install
 
 yarn start 
+```
 
+## For postman usage
+```
 # returns 'add user'
 localhost:4000/v1/user/add-user
 
@@ -38,6 +41,8 @@ localhost:4000/v1/user/get-user/id
 # returns 'get all users'
 localhost:4000/v1/user/get-all-users
 ```
+## For Swagger ui usage
+http://localhost:4000/api-docs/
 
 ## Contributing
 

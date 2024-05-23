@@ -1,0 +1,98 @@
+openapi: 3.0.0
+info:
+  title: Node.js REST API with Swagger UI
+  version: 1.0.0
+  description: A simple REST API example with Swagger UI
+  contact:
+    name: Harshil
+    email: harshilpanchal1998@email.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:4000/v1/user
+  - url: http://localhost:4000/v1/user
+paths:
+  /get-all-users:
+    get:
+      summary: Get all users
+      tags: [User]
+      description: This get All users
+      responses:
+        '200':
+          description: Success
+  /get-user/{id}:
+    get:
+      summary: Get a user by ID
+      tags: [User]
+      description: Get a user by their ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      responses:
+        '200':
+          description: Success
+  /add-user:
+    post:
+      summary: Add a new user
+      tags: [User]
+      description: Add a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserInput'
+      responses:
+        '200':
+          description: Success
+  /update-user/{id}:
+    put:
+      summary: Update a user by ID
+      tags: [User]
+      description: Update a user by their ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserInput'
+      responses:
+        '200':
+          description: Success
+  /delete-user/{id}:
+    delete:
+      summary: Delete a user by ID
+      tags: [User]
+      description: Delete a user by their ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    AddUserInput:
+      type: object
+      properties:
+        // Define properties here for adding a user
+    UpdateUserInput:
+      type: object
+      properties:
+        // Define properties here for updating a user
