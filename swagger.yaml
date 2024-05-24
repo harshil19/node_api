@@ -11,7 +11,6 @@ info:
     url: https://opensource.org/licenses/MIT
 servers:
   - url: http://localhost:4000/v1/user
-  - url: http://localhost:4000/v1/user
 paths:
   /get-all-users:
     get:
@@ -31,7 +30,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
           description: User ID
       responses:
         '200':
@@ -60,7 +59,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
           description: User ID
       requestBody:
         required: true
@@ -81,7 +80,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
           description: User ID
       responses:
         '200':
@@ -91,8 +90,49 @@ components:
     AddUserInput:
       type: object
       properties:
-        // Define properties here for adding a user
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        profileUrl:
+          type: string
+          format: uri
+        email:
+          type: string
+          format: email
+        phone:
+          type: integer
+          format: int64
+        country:
+          type: string
+      required:
+        - id
+        - name
+        - profileUrl
+        - email
+        - phone
+        - country
     UpdateUserInput:
       type: object
       properties:
-        // Define properties here for updating a user
+        name:
+          type: string
+        profileUrl:
+          type: string
+          format: uri
+        email:
+          type: string
+          format: email
+        phone:
+          type: integer
+          format: int64
+        country:
+          type: string
+      required:
+        - id
+        - name
+        - profileUrl
+        - email
+        - phone
+        - country

@@ -34,4 +34,4 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use('/v1', mainRoutes)
 app.use('/v1/user', userRoutes)
 
-app.listen(port, () => console.log(`Check Server http://localhost:${port}`))
+app.listen(port, () => console.log(`Check Server http://localhost:${port}/api-docs/`))
